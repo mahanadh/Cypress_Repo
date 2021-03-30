@@ -2,4 +2,4 @@
 
 
 
-This repo consits of all small-to-big test cases I have built personally in Cypress.
+This repo consits of all small-to-big test cases I have written personally in Cypress.
