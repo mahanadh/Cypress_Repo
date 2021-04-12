@@ -1,5 +1,5 @@
-describe('UI elements automation', function(){
-    it('UI related element automation', function(){
+describe('Pop up test script', function(){
+    it('Pop up test case', function(){
         cy.visit('https://rahulshettyacademy.com/AutomationPractice/')
         cy.get('#alertbtn').click()
         cy.get('#confirmbtn').click()
