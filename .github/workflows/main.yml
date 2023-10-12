@@ -1,45 +1,17 @@
-name: Sputnik Automation Test
+name: Cypress Tests
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 2 * * 1-5'
-
-  repository_dispatch:
-    types:
-      - QA-Dispatch
-      - QA2-Dispatch
+on: push
 
 jobs:
-  test:
-    name: Sputnik E2E Test Automation
-    runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
-      matrix:
-        specFile:
-          - cypress/integration/Mahans_Tests/childWindow.spec.js
-          - cypress/integration/Mahans_Tests/firstTestBasicAll.spec.js
-
+  cypress-run:
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set Test Matrix
-        run: |
-          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
-            if [ "${{ github.event.client_payload.type }}" == "QA-Dispatch" ]; then
-              echo "specFile=cypress/integration/Mahans_Tests/childWindow.spec.js" >> $GITHUB_ENV
-            elif [ "${{ github.event.client_payload.type }}" == "QA2-Dispatch" ]; then
-              echo "specFile=cypress/integration/Mahans_Tests/firstTestBasicAll.spec.js" >> $GITHUB_ENV
-            fi
-          fi
-      - name: Cypress Test run
-        uses: cypress-io/github-action@v4
+        uses: actions/checkout@v4
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
         with:
-          record: true
-          parallel: true
-          group: 'Sputnik E2E Test Automation'
-          spec: ${{ env.specFile }}
-          config: baseUrl=https://uat.cloudfactorybeta.app/
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          build: npm run build
+          start: npm start
